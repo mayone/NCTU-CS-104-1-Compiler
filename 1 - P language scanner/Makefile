@@ -13,7 +13,7 @@ $(YYCFILE): $(LEXFILE)
 	$(LEX) $(LEXFILE)
 
 $(EXECUTE): $(YYCFILE)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(YYCFILE) -o $@
+	$(CC) -o $@ $(YYCFILE) $(CFLAGS) $(LDFLAGS)
 
 run:
 	./$(EXECUTE) $(INPUT)

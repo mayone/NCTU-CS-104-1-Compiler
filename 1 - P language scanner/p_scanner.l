@@ -17,13 +17,15 @@ int linenum = 1;
 char buf[MAX_LINE_LENG];
 char yystring[MAX_LINE_LENG];
 %}
+
 digit			[0-9]
 natural			[1-9][0-9]*
 nonnegative		0|{natural}
-octal			(0[1-7][0-7]*)
+octal			0[0-7]+
 decimal			{nonnegative}
-float			{nonnegative}\.[0-9]*
-scientific		(0[1-7][0-7]*|{natural}\.[0-9]*)[eE][+-]?(0[1-7]+|{nonnegative})
+fraction		0|[0-9]*
+float			{nonnegative}\.{fraction}
+scientific		({nonnegative}|{octal}|{float})[eE][+-]?({nonnegative}|{octal})
 letter			[a-zA-Z]
 id				{letter}({letter}|{digit})*
 endS			["\""/^"\""]
