@@ -1,11 +1,26 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 extern int linenum;             /* declared in lex.l */
 extern FILE *yyin;              /* declared by lex */
 extern char *yytext;            /* declared by lex */
 extern char buf[256];           /* declared in lex.l */
+
+#define DEBUG 0
+
+void _debug(const char *format, ...)
+{
+	if( DEBUG )
+	{
+		va_list ap;
+
+		va_start(ap, format);
+		vfprintf(stderr, format, ap);
+		va_end(ap);
+	}
+}
 %}
 	/* Delimiters */
 %token COMMA
@@ -56,7 +71,7 @@ extern char buf[256];           /* declared in lex.l */
 
 	/* Program */
 program		: programname SEMICOLON programbody END identifier
-			  {printf("reducing to program...\n");}
+			  {_debug("reducing to program...\n");}
 			;
 
 programname	: identifier
@@ -73,14 +88,14 @@ data_decls	: var_decl data_decls
 
 	/* Variable declaration */
 var_decl	: VAR id_list COLON scalar_type SEMICOLON
-			  {printf("reducing to var_decl...\n");}
+			  {_debug("reducing to var_decl...\n");}
 			| VAR id_list COLON struct_type SEMICOLON
-			  {printf("reducing to var_decl of array...\n");}
+			  {_debug("reducing to var_decl of array...\n");}
 			;
 
 	/* Constant declaration */
 const_decl	: VAR id_list COLON liter_const SEMICOLON
-			  {printf("reducing to const_decl...\n");}
+			  {_debug("reducing to const_decl...\n");}
 			;
 
 	/* Function declarations */
@@ -89,12 +104,12 @@ func_decls	: func_decl func_decls
 			;
 
 func_decl	: identifier '(' decl_args ')' COLON type SEMICOLON comp_stmt END identifier
-			  {printf("reducing to func_decl...\n");}
+			  {_debug("reducing to func_decl...\n");}
 			| proc_decl /* procedure */
 			;
 
 proc_decl	: identifier '(' decl_args ')' SEMICOLON comp_stmt END identifier
-			  {printf("reducing to proc_decl...\n");}
+			  {_debug("reducing to proc_decl...\n");}
 			;
 
 decl_args	: decl_list
@@ -147,7 +162,7 @@ statements	: comp_stmt statements
 			;
 
 comp_stmt	: BEG data_decls statements END
-			  {printf("reducing to comp_stmt...\n");}
+			  {_debug("reducing to comp_stmt...\n");}
 			;
 
 simp_stmt	: var_ref ASSIGN expression SEMICOLON
@@ -157,21 +172,21 @@ simp_stmt	: var_ref ASSIGN expression SEMICOLON
 			;
 
 cond_stmt	: IF bool_expr THEN statements ELSE statements END IF
-			  {printf("reducing to cond_stmt: if_then_else...\n");}
+			  {_debug("reducing to cond_stmt: if_then_else...\n");}
 			| IF bool_expr THEN statements END IF
-			  {printf("reducing to cond_stmt: if_then...\n");}
+			  {_debug("reducing to cond_stmt: if_then...\n");}
 			;
 
 while_stmt	: WHILE bool_expr DO statements END DO
-			  {printf("reducing to while_stmt...\n");}
+			  {_debug("reducing to while_stmt...\n");}
 			;
 
 for_stmt	: FOR identifier ASSIGN INT_CONST TO INT_CONST DO statements END DO
-			  {printf("reducing to for_stmt...\n");}
+			  {_debug("reducing to for_stmt...\n");}
 			;
 
 return_stmt	: RETURN expression SEMICOLON
-			  {printf("reducing to return_stmt...\n");}
+			  {_debug("reducing to return_stmt...\n");}
 			;
 
 var_ref		: identifier
@@ -184,7 +199,7 @@ arr_indices	: '[' int_expr ']' arr_indices
 
 	/* Function invocation */
 func_invoc	: identifier '(' expr_args ')'
-			  {printf("reducing to func_invoc...\n");}
+			  {_debug("reducing to func_invoc...\n");}
 			;
 
 expr_args	: expr_list
