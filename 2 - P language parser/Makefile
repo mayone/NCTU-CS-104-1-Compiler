@@ -22,6 +22,9 @@ $(YYCFILE): $(LEXFILE) $(TABHFILE)
 $(EXECUTE): $(YYCFILE) $(TABCFILE)
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
+debug: $(YYCFILE) $(TABCFILE)
+	$(CC) -o $(EXECUTE) $^ $(CFLAGS) $(LDFLAGS) -DDEBUG
+
 run:
 	./$(EXECUTE) $(INPUT)
 clean:

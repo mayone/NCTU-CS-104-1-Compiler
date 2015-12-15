@@ -8,7 +8,11 @@ extern FILE *yyin;              /* declared by lex */
 extern char *yytext;            /* declared by lex */
 extern char buf[256];           /* declared in lex.l */
 
+#ifdef DEBUG
+#define DEBUG 1
+#else
 #define DEBUG 0
+#endif
 
 void _debug(const char *format, ...)
 {
