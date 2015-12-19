@@ -110,7 +110,6 @@ spaces			[ \t]+
 "//&T+".*		{LIST; Opt_T = 1;}
 "//&T-".*		{LIST; Opt_T = 0;}
 	/* Comments */
-.				{LIST;}
 "/*"			{LIST; BEGIN COMMENT;}
 <COMMENT>.		{LIST;}
 <COMMENT>"\n"	{
@@ -122,6 +121,12 @@ spaces			[ \t]+
 				}
 <COMMENT>"*/"	{LIST; BEGIN INITIAL;}
 "//".*			{LIST;}
+	/* Other character */
+.				{
+					/* error */
+					printf("Error at line %d: bad character \"%s\"\n", linenum, yytext);
+					exit(-1);
+				}
 
 %%
 int main( int argc, char **argv )
