@@ -60,21 +60,21 @@ void sem_error( char *msg );
 %token FOR
 %token DO
 	/* Data Types */
-%token ARRAY
+%token <array_type> ARRAY
 %token <type> BOOL
 %token <type> INT
 %token <type> REAL
 %token <type> STR
 	/* Constant Number */
-%token TRUE
-%token FALSE
-%token DEC_CONST
-%token OCT_CONST
-%token FLOAT_CONST
-%token SCIENTIFIC
-%token STR_CONST
+%token <value> TRUE
+%token <value> FALSE
+%token <value> DEC_CONST
+%token <value> OCT_CONST
+%token <fval> FLOAT_CONST
+%token <fval> SCIENTIFIC
+%token <text> STR_CONST
 	/* Identifiers */
-%token ID
+%token <text> ID
 	/* Keywords */
 %token BEG
 %token DEF
@@ -85,6 +85,8 @@ void sem_error( char *msg );
 %token RETURN
 %token TO
 %token VAR
+	/* Start Symbol */
+%start program
 
 %%
 
@@ -188,7 +190,23 @@ liter_const	: bool_const
 			;
 
 bool_const	: TRUE
+			  {
+			  	if( $<type>$ == TYPE_BOOL ) {
+			  		$<value>$ = $1;
+			  	}
+			  	else {
+			  		sem_error("initial value type mismatch");
+			  	}
+			  }
 			| FALSE
+			  {
+			  	if( $<type>$ == TYPE_BOOL ) {
+			  		$<value>$ = $1;
+			  	}
+			  	else {
+			  		sem_error("initial value type mismatch");
+			  	}
+			  }
 			;
 
 int_const	: DEC_CONST

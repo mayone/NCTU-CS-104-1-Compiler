@@ -8,6 +8,7 @@ YYCFILE = lex.yy.c
 YACCFILE = p_parser.y
 TABCFILE = y.tab.c
 TABHFILE = y.tab.h
+SYMTBLFILE = SymbolTable.c
 EXECUTE = parser
 INPUT = input.p
 
@@ -19,13 +20,13 @@ $(TABHFILE): $(YACCFILE)
 $(YYCFILE): $(LEXFILE) $(TABHFILE)
 	$(LEX) $<
 
-$(EXECUTE): $(YYCFILE) $(TABCFILE)
+$(EXECUTE): $(YYCFILE) $(TABCFILE) $(SYMTBLFILE)
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
-debug: $(YYCFILE) $(TABCFILE)
+debug: $(YYCFILE) $(TABCFILE) $(SYMTBLFILE)
 	$(CC) -o $(EXECUTE) $^ $(CFLAGS) $(LDFLAGS) -DDEBUG
 
 run:
 	./$(EXECUTE) $(INPUT)
 clean:
-	rm -rf *.c y.* $(EXECUTE)
+	rm -rf lex.* y.* $(EXECUTE)

@@ -1,7 +1,7 @@
 CC = gcc
 LEX = lex
-CFLAGS =  -I/opt/local/bin
-LDFLAGS = -L/opt/local/lib -lfl
+CFLAGS =  -I/usr/bin
+LDFLAGS = -L/usr/lib -lfl
 LEXFILE = p_scanner.l
 YYCFILE = lex.yy.c
 EXECUTE = scanner

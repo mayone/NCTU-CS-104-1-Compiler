@@ -1,8 +1,8 @@
 %{
 #include <stdlib.h>
 #include <string.h>
-#include "y.tab.h"
 #include "SymbolTable.h"
+#include "y.tab.h"
 
 #define LIST				strcat(buf, yytext)
 #define token(t)			{LIST; if (Opt_T) printf("<%s>\n", #t);}
